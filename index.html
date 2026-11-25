@@ -341,7 +341,7 @@
   <div class="chapter__head">
     <span class="chapter__num">V</span>
     <h2>Petition the crown</h2>
-    <p class="chapter__sub">Fill this out and we'll turn it into an email you can send to both of us in one tap.</p>
+    <p class="chapter__sub">A few questions so we can get to know you. Matt and Marisa both see every answer.</p>
   </div>
 
   <div class="apply">
@@ -371,30 +371,16 @@
       <label class="f-row"><span class="f-label">Where can we find you online?</span><input name="link" placeholder="Instagram, LinkedIn, website (optional)"></label>
 
       <p class="f-error" id="formError" role="alert" hidden>A few required fields are still empty. They're outlined above.</p>
-      <button class="btn btn--big" type="submit">Write my email →</button>
+      <button class="btn btn--big" type="submit">Send my petition →</button>
     </form>
 
-    <div class="apply__out card" id="applyOut" hidden tabindex="-1">
-      <p class="cta__k">Step 2 · Send it to both of us</p>
-      <h3>Your petition is ready</h3>
-      <p>Send it to <b>both</b> addresses below so neither of us misses it.</p>
-
-      <div class="send">
-        <a class="btn btn--big" id="mailBtn" href="#">Open in my email app ✉</a>
-        <button class="btn btn--ghost" type="button" id="copyMsg">Copy message</button>
-      </div>
-
-      <ul class="addr" id="addrList"></ul>
-      <button class="btn btn--ghost btn--small" type="button" id="copyAddrs">Copy both addresses</button>
-
-      <p class="f-label out-label">Subject</p>
-      <pre class="out-subj" id="outSubj"></pre>
-      <p class="f-label out-label">Message</p>
-      <pre class="out-body" id="outBody"></pre>
-
-      <button class="linkish" type="button" id="editAgain">← Edit my answers</button>
+    <div class="apply__out apply__thanks card" id="applyThanks" hidden tabindex="-1">
+      <p class="cta__k">Received</p>
+      <h3>Your petition has reached the castle</h3>
+      <p>Thanks, <b id="thanksName"></b>. Matt and Marisa both get your application and will be in touch soon. 🦄</p>
     </div>
   </div>
+  <iframe name="gf-sink" title="Form submission" hidden></iframe>
 </section>
 
 </main>
@@ -435,20 +421,22 @@
   }, { threshold: 0.15 });
   document.querySelectorAll('.chapter__head, .room, .perk, .fact, .court').forEach(el => { el.classList.add('reveal'); io.observe(el); });
 
-  // ---------- Application form → ready-to-send email ----------
+  // ---------- Application form → Google Form (responses land in the Sheet) ----------
   (() => {
     const form = document.getElementById('applyForm');
-    const out = document.getElementById('applyOut');
+    const thanks = document.getElementById('applyThanks');
     const err = document.getElementById('formError');
-    // Assembled at runtime so the addresses aren't sitting in the HTML for scrapers
-    const at = String.fromCharCode(64);
-    const TO = [['mgillespiedesign', 'gmail.com'], ['mareesastertz', 'gmail.com']].map(([u, d]) => u + at + d);
     const DRAFT = 'uc-apply-draft';
 
-    const fmtDate = v => {
-      if (!v) return '';
-      const [y, m, d] = v.split('-').map(Number);
-      return new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const GOOGLE_FORM = {
+      action: 'https://docs.google.com/forms/d/e/1FAIpQLScKHZ25KeZG9weCso0aPdyx8r2pvB3svDPBYBvoBlWmON1wJw/formResponse',
+      entries: {    // site field → Google Form entry id
+        room: 'entry.444995231', name: 'entry.73078882', pronouns: 'entry.616410272',
+        email: 'entry.1999689451', phone: 'entry.1833907988',
+        in: 'entry.2057407315', out: 'entry.1134220919',
+        why: 'entry.723400439', about: 'entry.1920899768', housemate: 'entry.1962770850',
+        else: 'entry.927335636', link: 'entry.405604291',
+      },
     };
 
     // Restore an unsent draft (per-browser convenience only)
@@ -464,7 +452,19 @@
       try { localStorage.setItem(DRAFT, JSON.stringify(Object.fromEntries(new FormData(form)))); } catch (e) {}
     });
 
-    let subject = '', body = '';
+    const postToGoogle = f => {
+      const gf = document.createElement('form');
+      gf.action = GOOGLE_FORM.action; gf.method = 'POST'; gf.target = 'gf-sink'; gf.hidden = true;
+      const add = (n, v) => { const i = document.createElement('input'); i.type = 'hidden'; i.name = n; i.value = v; gf.appendChild(i); };
+      for (const [key, entry] of Object.entries(GOOGLE_FORM.entries)) {
+        if (!f[key]) continue;
+        if (key === 'in' || key === 'out') {           // Google date questions take y/m/d parts
+          const [y, m, d] = f[key].split('-');
+          add(`${entry}_year`, y); add(`${entry}_month`, String(+m)); add(`${entry}_day`, String(+d));
+        } else add(entry, f[key]);
+      }
+      document.body.appendChild(gf); gf.submit(); gf.remove();
+    };
 
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -476,55 +476,12 @@
       }
       err.hidden = true;
       const f = Object.fromEntries(new FormData(form));
-      const roomShort = f.room.split(' (')[0];
-      const contact = [f.email, f.phone].filter(Boolean).join(' · ');
-      const section = (title, text) => text && text.trim() ? `\n${title.toUpperCase()}\n${text.trim()}\n` : '';
-
-      subject = `Unicorn Castle sublet: ${f.name} for ${roomShort}`;
-      body =
-`Hi Matt and Marisa,
-
-I'd love to sublet a room at the Unicorn Castle this winter. Here's a little about me.
-
-Name: ${f.name}${f.pronouns ? ` (${f.pronouns})` : ''}
-Contact: ${contact}
-Room: ${f.room}
-Dates: ${fmtDate(f.in)} to ${fmtDate(f.out)}${f.link ? `\nOnline: ${f.link}` : ''}
-${section('What brings me to Oakland', f.why)}${section('About me', f.about)}${section('As a housemate', f.housemate)}${section('Anything else', f.else)}
-Thanks for considering me!
-${f.name}`;
-
-      document.getElementById('outSubj').textContent = subject;
-      document.getElementById('outBody').textContent = body;
-      document.getElementById('mailBtn').href =
-        `mailto:${TO.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      document.getElementById('addrList').innerHTML = TO.map(a =>
-        `<li><span>${a}</span><button type="button" class="btn btn--ghost btn--small" data-copy="${a}">Copy</button></li>`).join('');
-
-      form.hidden = true;
-      out.hidden = false;
-      out.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      out.focus({ preventScroll: true });
-    });
-
-    const copy = async (text, btn) => {
-      const label = btn.textContent;
-      try { await navigator.clipboard.writeText(text); }
-      catch (e) {
-        const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t); t.select();
-        document.execCommand('copy'); t.remove();
-      }
-      btn.textContent = 'Copied ✓';
-      setTimeout(() => btn.textContent = label, 1600);
-    };
-
-    out.addEventListener('click', e => {
-      const b = e.target.closest('button');
-      if (!b) return;
-      if (b.id === 'copyMsg') copy(`Subject: ${subject}\n\n${body}`, b);
-      else if (b.id === 'copyAddrs') copy(TO.join(', '), b);
-      else if (b.dataset.copy) copy(b.dataset.copy, b);
-      else if (b.id === 'editAgain') { out.hidden = true; form.hidden = false; form.scrollIntoView({ behavior: 'smooth' }); }
+      postToGoogle(f);
+      try { localStorage.removeItem(DRAFT); } catch (e) {}
+      document.getElementById('thanksName').textContent = f.name.trim().split(' ')[0];
+      form.hidden = true; thanks.hidden = false;
+      thanks.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      thanks.focus({ preventScroll: true });
     });
   })();
 </script>
