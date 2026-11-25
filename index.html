@@ -44,6 +44,7 @@
   <nav aria-label="Sections">
     <a href="#castle">Castle</a>
     <a href="#rooms">Rooms</a>
+    <a href="#house">House</a>
     <a href="#perks">Perks</a>
     <a href="#court">Hosts</a>
   </nav>
@@ -226,10 +227,49 @@
   </div>
 </section>
 
-<!-- ============ CHAPTER III : PERKS ============ -->
-<section id="perks" class="chapter chapter--violet">
+<!-- ============ CHAPTER III : COMMON ROOMS ============ -->
+<section id="house" class="chapter chapter--common">
   <div class="chapter__head">
     <span class="chapter__num">III</span>
+    <h2>The common rooms</h2>
+    <p class="chapter__sub">Shared with the rest of the household. High ceilings, plaster medallions, and a chandelier in nearly every room.</p>
+  </div>
+
+  <div class="common">
+    <figure class="common__item common__item--parlor">
+      <button class="shot frame frame--orchid" data-full="img/living.jpg">
+        <img src="img/living.jpg" alt="Victorian parlor with yellow walls, crimson velvet sofas, a crystal chandelier, large abstract paintings, and a bay window" loading="lazy" width="1050" height="1400">
+      </button>
+      <figcaption class="card">
+        <h3>The parlor</h3>
+        <p>Deep velvet sofas, a bay window full of light, and big original paintings on the walls. Built for long talks and lazy Sundays.</p>
+      </figcaption>
+    </figure>
+    <figure class="common__item">
+      <button class="shot frame frame--violet" data-full="img/dining.jpg">
+        <img src="img/dining.jpg" alt="Dining room with magenta walls, sage trim, a brass chandelier, a wooden table and chairs, and pocket doors opening to the parlor" loading="lazy" width="1050" height="1400">
+      </button>
+      <figcaption class="card">
+        <h3>The dining room</h3>
+        <p>Magenta walls, a brass chandelier, and pocket doors that open straight into the parlor.</p>
+      </figcaption>
+    </figure>
+    <figure class="common__item">
+      <button class="shot frame frame--mauve" data-full="img/kitchen.jpg">
+        <img src="img/kitchen.jpg" alt="Kitchen with a tiled island, hanging pot rack, vintage stove, espresso machine, and a window over the sink" loading="lazy" width="1050" height="1400">
+      </button>
+      <figcaption class="card">
+        <h3>The kitchen</h3>
+        <p>A tiled island with stools, a pot rack, a vintage stove, a dishwasher, and an espresso machine.</p>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============ CHAPTER IV : PERKS ============ -->
+<section id="perks" class="chapter chapter--violet">
+  <div class="chapter__head">
+    <span class="chapter__num">IV</span>
     <h2>Royal perks</h2>
     <p class="chapter__sub">Small things that come with the crown.</p>
   </div>
@@ -306,10 +346,10 @@
   </div>
 </section>
 
-<!-- ============ CHAPTER IV : THE ROYALS ARE AWAY ============ -->
+<!-- ============ CHAPTER V : THE ROYALS ARE AWAY ============ -->
 <section id="court" class="chapter chapter--scales">
   <div class="chapter__head">
-    <span class="chapter__num">IV</span>
+    <span class="chapter__num">V</span>
     <h2>The royals are away</h2>
   </div>
 
@@ -344,10 +384,10 @@
   </div>
 </section>
 
-<!-- ============ CHAPTER V : APPLY ============ -->
+<!-- ============ CHAPTER VI : APPLY ============ -->
 <section id="apply" class="chapter chapter--apply">
   <div class="chapter__head">
-    <span class="chapter__num">V</span>
+    <span class="chapter__num">VI</span>
     <h2>Petition the crown</h2>
     <p class="chapter__sub">A few questions so we can get to know you. Matt and Mareesa both see every answer.</p>
   </div>
@@ -427,7 +467,7 @@
   const io = new IntersectionObserver(entries => {
     entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
   }, { threshold: 0.15 });
-  document.querySelectorAll('.chapter__head, .room, .perk, .fact, .court').forEach(el => { el.classList.add('reveal'); io.observe(el); });
+  document.querySelectorAll('.chapter__head, .room, .perk, .fact, .court, .common__item').forEach(el => { el.classList.add('reveal'); io.observe(el); });
 
   // ---------- Application form → Google Form (responses land in the Sheet) ----------
   (() => {

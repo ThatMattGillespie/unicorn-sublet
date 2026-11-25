@@ -480,3 +480,19 @@ a { color: inherit; }
 @media (min-width: 1025px) {
   .perk--yard .perk__photo, .perk--bath .perk__pair img { height: 380px; aspect-ratio: auto; }
 }
+
+/* ---------- Common rooms ---------- */
+.chapter--common { background: var(--pink-lt); }
+.common { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: clamp(20px, 3vw, 36px); align-items: start; }
+.common__item { margin: 0; display: flex; flex-direction: column; gap: 0; }
+.common__item .shot { aspect-ratio: 3 / 4; width: 100%; display: block; }
+.common__item figcaption { margin: -24px 14px 0; position: relative; z-index: 2; padding: 18px 22px; box-shadow: 5px 5px 0 var(--ink); }
+.common__item h3 { font-size: clamp(26px, 2.4vw, 34px); font-weight: 800; text-transform: uppercase; margin-bottom: 8px; }
+.common__item p { font-size: 16px; margin: 0; }
+.common__item:nth-child(2) { margin-top: 56px; }
+.common__item:nth-child(3) { margin-top: 112px; }
+.common__item--parlor .shot { transform: rotate(-1.2deg); }
+@media (max-width: 860px) {
+  .common { grid-template-columns: 1fr; max-width: 520px; }
+  .common__item:nth-child(n) { margin-top: 0; }
+}
