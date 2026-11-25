@@ -278,7 +278,7 @@ a { color: inherit; }
 .perk--lead h3 { font-size: clamp(40px, 4.4vw, 64px); text-transform: uppercase; }
 .perk--lead p { font-size: 19px; max-width: 34ch; }
 .perk--lead .perk__icon { background: var(--cream); }
-.perk--video { grid-column: span 2; grid-row: span 2; padding: 0; display: flex; flex-direction: column; background: var(--ink); color: var(--cream); }
+.perk--video { grid-column: span 2; grid-row: span 3; padding: 0; display: flex; flex-direction: column; background: var(--ink); color: var(--cream); }
 .perk--video video { flex: 1 1 0; width: 100%; height: 100%; min-height: 0; object-fit: cover; }
 .perk--video { min-height: 560px; }
 .perk--video figcaption { padding: 20px 24px; border-top: var(--bw) solid var(--ink); background: var(--mauve); }
