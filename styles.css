@@ -353,3 +353,120 @@ a { color: inherit; }
   .gallery .sticker { right: 0; }
   .gallery--den .sticker { left: 0; }
 }
+
+/* =========================================================
+   v2: vertical porch video, postcard hosts, application form
+   ========================================================= */
+
+/* ---------- Perks: video gets its own tall column ---------- */
+.perk--video video { object-position: 50% 60%; }
+.perk--bath .perk__text h3 { margin-top: 16px; }
+
+@media (min-width: 1025px) {
+  .perks {
+    grid-template-columns: 1fr 1fr 1fr 1.25fr;
+    grid-template-areas:
+      "lead lead lead vid"
+      "suit sf   lib  vid"
+      "gard work inc  vid"
+      "bath bath bath bath";
+  }
+  .perk--lead  { grid-area: lead; min-height: 240px; }
+  .perk--video { grid-area: vid; min-height: 0; }
+  .p-suit { grid-area: suit; } .p-sf { grid-area: sf; } .p-lib { grid-area: lib; }
+  .p-gard { grid-area: gard; } .p-work { grid-area: work; } .p-inc { grid-area: inc; }
+  .perk--bath {
+    grid-area: bath;
+    display: grid; grid-template-columns: minmax(0, 1.4fr) 1fr; gap: 32px; align-items: center;
+  }
+  .perk--bath .perk__pair img { aspect-ratio: 4 / 3; }
+  .perk--bath .perk__text h3 { font-size: clamp(30px, 3vw, 44px); margin-top: 0; }
+  .perk--bath .perk__text p { font-size: 18px; }
+}
+@media (max-width: 1024px) {
+  .perk--video { grid-column: span 1; grid-row: span 3; min-height: 0; }
+}
+@media (max-width: 560px) {
+  .perk--video { grid-row: auto; }
+  .perk--video video { flex: none; height: auto; aspect-ratio: 9 / 16; }
+}
+
+/* ---------- Postcard ---------- */
+.postcard {
+  display: grid; grid-template-columns: 1.6fr 1fr; gap: 0; padding: 0;
+  background: var(--cream); transform: rotate(1deg);
+}
+.postcard__msg { padding: clamp(24px, 3vw, 40px); border-right: 2px dashed var(--mauve); }
+.postcard__msg p { font-size: 19px; }
+.postcard__hi { font-family: var(--f-serif); font-style: italic; font-size: clamp(30px, 3vw, 40px) !important; line-height: 1.1; color: var(--violet); }
+.postcard__sign { font-family: var(--f-serif); font-style: italic; font-size: 22px !important; margin: 24px 0 0; line-height: 1.3; }
+.postcard__sign b { font-family: var(--f-display); font-style: normal; font-weight: 800; color: var(--violet); font-size: 26px; }
+.postcard__side { padding: clamp(20px, 3vw, 32px); display: flex; flex-direction: column; align-items: flex-end; gap: 22px; }
+.postcard__stamp {
+  width: 104px; height: 124px; display: grid; place-content: center; text-align: center; font-size: 46px; line-height: 1.1;
+  background: var(--pink); border: 3px solid var(--ink); outline: 3px dashed var(--pink); outline-offset: -11px; transform: rotate(4deg);
+}
+.postcard__stamp small { display: block; font-family: var(--f-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .1em; }
+.postcard__mark {
+  align-self: center; border: 3px solid var(--orchid); color: var(--orchid); border-radius: 50%;
+  width: 132px; height: 132px; display: grid; place-content: center; text-align: center; padding: 10px;
+  font-family: var(--f-mono); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; transform: rotate(-14deg);
+}
+.postcard__line { align-self: stretch; border-bottom: 2px solid var(--ink); height: 28px; opacity: .5; }
+.court__photo .sticker { right: -18px; top: -24px; }
+
+/* ---------- Apply ---------- */
+.chapter--apply { background: var(--lilac); }
+.apply > * { max-width: 920px; }
+.apply__form, .apply__out { background: var(--cream); }
+.f-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+.f-row { display: flex; flex-direction: column; gap: 6px; margin: 0 0 22px; border: 0; padding: 0; min-width: 0; }
+.f-label { font-family: var(--f-mono); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 0; }
+.f-label i { font-style: normal; color: var(--orchid); }
+.f-help { font-size: 15px; margin-top: -2px; color: var(--mauve); }
+.apply input:not([type=radio]), .apply textarea {
+  font: inherit; font-size: 17px; color: var(--ink); background: #fff;
+  border: var(--bw) solid var(--ink); border-radius: 0; padding: 12px 14px; width: 100%;
+  box-shadow: 4px 4px 0 var(--pink);
+}
+.apply textarea { resize: vertical; min-height: 96px; }
+.apply input:focus, .apply textarea:focus { outline: none; box-shadow: 4px 4px 0 var(--violet); }
+.tried :invalid:not(fieldset) { border-color: var(--orchid); box-shadow: 4px 4px 0 var(--orchid); }
+.tried fieldset:has(:invalid) .choice span { border-color: var(--orchid); }
+.choice { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+.choice label { cursor: pointer; }
+.choice input { position: absolute; opacity: 0; pointer-events: none; }
+.choice span {
+  display: block; height: 100%; border: var(--bw) solid var(--ink); background: #fff; padding: 14px 16px;
+  font-family: var(--f-mono); font-size: 13px; box-shadow: 4px 4px 0 var(--ink); transition: transform .1s;
+}
+.choice span b { display: block; font-family: var(--f-display); font-size: 22px; line-height: 1.1; margin-bottom: 4px; }
+.choice input:checked + span { background: var(--violet); color: var(--cream); transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+.choice input:focus-visible + span { outline: 3px solid var(--orchid); outline-offset: 3px; }
+.f-error { background: var(--orchid); color: var(--cream); padding: 10px 14px; font-weight: 600; }
+
+.apply__out:focus { outline: none; }
+.apply__out h3 { font-size: clamp(36px, 4vw, 56px); font-weight: 800; text-transform: uppercase; margin: 6px 0 14px; }
+.send { display: flex; flex-wrap: wrap; gap: 14px; margin: 22px 0; }
+.addr { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 10px; }
+.addr li { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 2px solid var(--ink); background: var(--pink-lt); padding: 8px 8px 8px 14px; font-family: var(--f-mono); font-size: 15px; word-break: break-all; }
+.out-label { margin: 26px 0 8px; }
+.out-subj, .out-body {
+  margin: 0; white-space: pre-wrap; word-wrap: break-word; font-family: var(--f-mono); font-size: 14px; line-height: 1.6;
+  background: #fff; border: 2px solid var(--ink); padding: 14px 16px;
+}
+.out-body { max-height: 420px; overflow: auto; }
+.linkish { margin-top: 22px; background: none; border: 0; padding: 0; font: 700 14px var(--f-mono); text-transform: uppercase; letter-spacing: .06em; text-decoration: underline; cursor: pointer; color: var(--ink); }
+
+@media (max-width: 860px) {
+  .postcard { grid-template-columns: 1fr; transform: none; }
+  .postcard__msg { border-right: 0; border-bottom: 2px dashed var(--mauve); }
+  .postcard__side { flex-direction: row; align-items: center; justify-content: space-between; }
+  .postcard__line { display: none; }
+}
+@media (max-width: 640px) {
+  .f-grid, .choice { grid-template-columns: 1fr; }
+}
+
+/* Tilted stickers and frames shouldn't create sideways scroll on phones */
+.chapter, .hero { overflow-x: clip; }
