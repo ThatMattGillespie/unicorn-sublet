@@ -368,20 +368,30 @@ a { color: inherit; }
     grid-template-areas:
       "lead lead lead vid"
       "suit sf   lib  vid"
-      "gard work inc  vid"
-      "bath bath bath bath";
+      "gard cit  inc  vid"
+      "yard yard bath bath";
   }
   .perk--lead  { grid-area: lead; min-height: 240px; }
   .perk--video { grid-area: vid; min-height: 0; }
   .p-suit { grid-area: suit; } .p-sf { grid-area: sf; } .p-lib { grid-area: lib; }
-  .p-gard { grid-area: gard; } .p-work { grid-area: work; } .p-inc { grid-area: inc; }
-  .perk--bath {
-    grid-area: bath;
-    display: grid; grid-template-columns: minmax(0, 1.4fr) 1fr; gap: 32px; align-items: center;
-  }
-  .perk--bath .perk__pair img { aspect-ratio: 4 / 3; }
-  .perk--bath .perk__text h3 { font-size: clamp(30px, 3vw, 44px); margin-top: 0; }
-  .perk--bath .perk__text p { font-size: 18px; }
+  .p-gard { grid-area: gard; } .p-cit { grid-area: cit; } .p-inc { grid-area: inc; }
+  .perk--yard { grid-area: yard; }
+  .perk--bath { grid-area: bath; }
+  .perk--yard .perk__text h3, .perk--bath .perk__text h3 { font-size: clamp(28px, 2.6vw, 38px); }
+}
+
+/* Photo perks: backyard + bathroom, image on top, text below */
+.perk--yard { grid-column: span 2; }
+.perk__photo { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: 50% 42%; border: 2px solid var(--ink); }
+.perk--bath .perk__pair img { aspect-ratio: 3 / 4; }
+.perk--yard .perk__text h3, .perk--bath .perk__text h3 { margin-top: 16px; }
+@media (min-width: 1025px) {
+  .perk--bath .perk__pair img { aspect-ratio: 4 / 5; }
+  .perk--yard .perk__photo { aspect-ratio: 8 / 5; }
+}
+@media (max-width: 560px) {
+  .perk--yard { grid-column: auto; }
+  .perk__photo { aspect-ratio: 4 / 5; }
 }
 @media (max-width: 1024px) {
   .perk--video { grid-column: span 1; grid-row: span 3; min-height: 0; }
@@ -467,3 +477,6 @@ a { color: inherit; }
 
 /* Tilted stickers and frames shouldn't create sideways scroll on phones */
 .chapter, .hero { overflow-x: clip; }
+@media (min-width: 1025px) {
+  .perk--yard .perk__photo, .perk--bath .perk__pair img { height: 380px; aspect-ratio: auto; }
+}
